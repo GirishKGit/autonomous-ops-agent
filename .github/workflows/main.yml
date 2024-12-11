@@ -24,7 +24,7 @@ jobs:
         run: |
           aws sagemaker create-training-job \
             --training-job-name example-training-job \
-            --role-arn arn:aws:iam::<Your-Account-ID>:role/SageMakerExecutionRole \
+            --role-arn arn:aws:iam::arn:aws:iam::727646481220:role/SageMakerExecutionRole:role/SageMakerExecutionRole \
             --algorithm-specification TrainingImage=123456789012.dkr.ecr.us-east-1.amazonaws.com/my-algorithm:latest,TrainingInputMode=File \
             --input-data-config '[{"ChannelName":"train","DataSource":{"S3DataSource":{"S3Uri":"s3://my-bucket/input-data/","S3DataType":"S3Prefix","S3DataDistributionType":"FullyReplicated"}}}]' \
             --output-data-config S3OutputPath=s3://my-bucket/output-data/ \
