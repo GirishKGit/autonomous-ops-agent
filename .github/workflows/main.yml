@@ -26,7 +26,7 @@ jobs:
             --training-job-name example-training-job \
             --role-arn arn:aws:iam::727646481220:role/SageMakerExecutionRole \
             --algorithm-specification TrainingImage=123456789012.dkr.ecr.us-east-1.amazonaws.com/my-algorithm:latest,TrainingInputMode=File \
-            --input-data-config '[{"ChannelName":"train","DataSource":{"S3DataSource":{"S3Uri":"s3://my-bucket/input-data/","S3DataType":"S3Prefix","S3DataDistributionType":"FullyReplicated"}}}]' \
+            --input-data-config '[{"ChannelName":"train","DataSource":{"S3DataSource":{"S3Uri":"s3://irissdataset/","S3DataType":"S3Prefix","S3DataDistributionType":"FullyReplicated"}}}]'\
             --output-data-config S3OutputPath=s3://my-bucket/output-data/ \
             --resource-config InstanceType=ml.m5.large,InstanceCount=1,VolumeSizeInGB=10 \
             --stopping-condition MaxRuntimeInSeconds=3600
