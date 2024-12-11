@@ -10,9 +10,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # Step 1: Checkout the code from the repository
       - name: Checkout Code
         uses: actions/checkout@v2
 
+      # Step 2: Configure AWS credentials
       - name: Set Up AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -20,22 +22,24 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
 
+      # Step 3: Trigger SageMaker Training
       - name: Trigger SageMaker Training
         run: |
           aws sagemaker create-training-job \
-            --training-job-name example-training-job \
+            --training-job-name my-training-job \
             --role-arn arn:aws:iam::727646481220:role/SageMakerExecutionRole \
             --algorithm-specification TrainingImage=727646481220.dkr.ecr.us-east-1.amazonaws.com/my-algorithm:latest,TrainingInputMode=File \
-            --input-data-config '[{"ChannelName":"train","DataSource":{"S3DataSource":{"S3Uri":"s3://irissdataset/","S3DataType":"S3Prefix","S3DataDistributionType":"FullyReplicated"}}}]' \
+            --input-data-config '[{"ChannelName":"train","DataSource":{"S3DataSource":{"S3Uri":"s3://irissdataset/input-data/","S3DataType":"S3Prefix","S3DataDistributionType":"FullyReplicated"}}}]' \
             --output-data-config S3OutputPath=s3://irissdataset/output-data/ \
             --resource-config InstanceType=ml.m5.large,InstanceCount=1,VolumeSizeInGB=10 \
             --stopping-condition MaxRuntimeInSeconds=3600
 
+      # Step 4: Deploy the model to SageMaker
       - name: Deploy Model to SageMaker
         run: |
           aws sagemaker create-endpoint-config \
-            --endpoint-config-name example-endpoint-config \
-            --production-variants '[{"VariantName":"AllTraffic","ModelName":"example-training-job","InitialInstanceCount":1,"InstanceType":"ml.m5.large"}]'
+            --endpoint-config-name my-endpoint-config \
+            --production-variants '[{"VariantName":"AllTraffic","ModelName":"my-training-job","InitialInstanceCount":1,"InstanceType":"ml.m5.large"}]'
           aws sagemaker create-endpoint \
-            --endpoint-name example-endpoint \
-            --endpoint-config-name example-endpoint-config
+            --endpoint-name my-endpoint \
+            --endpoint-config-name my-endpoint-config
