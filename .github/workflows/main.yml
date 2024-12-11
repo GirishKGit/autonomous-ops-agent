@@ -24,7 +24,7 @@ jobs:
         run: |
           aws sagemaker create-training-job \
             --training-job-name example-training-job \
-            --role-arn arn:aws:iam::123456789012:role/SageMakerExecutionRole \
+            --role-arn arn:aws:iam::<Your-Account-ID>:role/SageMakerExecutionRole \
             --algorithm-specification TrainingImage=123456789012.dkr.ecr.us-east-1.amazonaws.com/my-algorithm:latest,TrainingInputMode=File \
             --input-data-config '[{"ChannelName":"train","DataSource":{"S3DataSource":{"S3Uri":"s3://my-bucket/input-data/","S3DataType":"S3Prefix","S3DataDistributionType":"FullyReplicated"}}}]' \
             --output-data-config S3OutputPath=s3://my-bucket/output-data/ \
@@ -35,7 +35,7 @@ jobs:
         run: |
           aws sagemaker create-endpoint-config \
             --endpoint-config-name example-endpoint-config \
-            --production-variants '[{"VariantName":"AllTraffic","ModelName":"example-model","InitialInstanceCount":1,"InstanceType":"ml.m5.large"}]'
+            --production-variants '[{"VariantName":"AllTraffic","ModelName":"example-training-job","InitialInstanceCount":1,"InstanceType":"ml.m5.large"}]'
 
           aws sagemaker create-endpoint \
             --endpoint-name example-endpoint \
